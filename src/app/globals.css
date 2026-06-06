@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Dark mode (default)                                                  */
+/* ------------------------------------------------------------------ */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:          #0c0c0e;
+  --bg-subtle:   #111114;
+  --surface:     #18181c;
+  --border:      #26262e;
+  --border-subtle: #1e1e26;
+  --fg:          #ededf0;
+  --fg-muted:    #6b6b7a;
+  --fg-subtle:   #3d3d48;
+  --primary:     #5b5ef4;
+  --primary-fg:  #ffffff;
+  --destructive: #dc2626;
+  --ring:        rgba(91, 94, 244, 0.35);
+
+  /* Legacy aliases for dashboard */
+  --background:  var(--bg);
+  --foreground:  var(--fg);
+  --card:        var(--bg-subtle);
+  --muted:       var(--surface);
+  --muted-fg:    var(--fg-muted);
+  --input:       var(--surface);
+}
+
+/* ------------------------------------------------------------------ */
+/* Light mode                                                           */
+/* ------------------------------------------------------------------ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:          #fafafb;
+  --bg-subtle:   #ffffff;
+  --surface:     #f4f4f6;
+  --border:      #e4e4ea;
+  --border-subtle: #ececf2;
+  --fg:          #111116;
+  --fg-muted:    #6b6b7a;
+  --fg-subtle:   #b0b0bc;
+  --primary:     #4f52e8;
+  --primary-fg:  #ffffff;
+  --destructive: #dc2626;
+  --ring:        rgba(79, 82, 232, 0.3);
+
+  --background:  var(--bg);
+  --foreground:  var(--fg);
+  --card:        var(--bg-subtle);
+  --muted:       var(--surface);
+  --muted-fg:    var(--fg-muted);
+  --input:       var(--surface);
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                 */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --color-background:       var(--background);
+  --color-foreground:       var(--foreground);
+  --color-card:             var(--card);
+  --color-muted:            var(--muted);
+  --color-muted-foreground: var(--muted-fg);
+  --color-border:           var(--border);
+  --color-primary:          var(--primary);
+  --color-destructive:      var(--destructive);
+  --font-sans:              var(--font-geist-sans);
+  --font-mono:              var(--font-geist-mono);
+}
+
+* { box-sizing: border-box; border-color: var(--border); }
+
+body {
+  background: var(--bg);
+  color:      var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Thin scrollbar */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 28s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
