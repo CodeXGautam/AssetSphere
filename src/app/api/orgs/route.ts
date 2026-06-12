@@ -3,7 +3,6 @@ import { z } from "zod";
 import { connectToDatabase } from "@/lib/db";
 import { Organisation } from "@/models/organisation";
 import { userService } from "@/services/user-service";
-import { sendOrgPendingEmail } from "@/lib/sendgrid";
 
 const createOrgSchema = z.object({
   orgName:       z.string().min(2).max(100),
@@ -22,7 +21,7 @@ function slugify(name: string): string {
 
 /**
  * POST /api/orgs
- * Public — creates a new organisation in PENDING state and its founder user.
+ * Public — creates a new organisation and its founder user.
  */
 export async function POST(request: Request) {
   try {
@@ -49,13 +48,12 @@ export async function POST(request: Request) {
     const exists  = await Organisation.findOne({ slug });
     if (exists) slug = `${slug}-${Date.now()}`;
 
-    // Create org in PENDING state first (no founder yet)
     const org = await Organisation.create({
       name:      orgName,
       slug,
       email:     orgEmail.toLowerCase(),
       founderId: new (await import("mongoose")).default.Types.ObjectId(), // placeholder
-      status:    "PENDING",
+      status:    "ACTIVE",
     });
 
     // Create founder user (no org access until approved)
@@ -63,25 +61,15 @@ export async function POST(request: Request) {
       name:     founderName,
       email:    founderEmail,
       password,
-      orgId:    null,  // granted on approval
-      orgRole:  null,
+      orgId:    String(org._id),  // granted on approval
+      orgRole:  "ORG_ADMIN",
     });
 
     // Update org with real founderId
     await Organisation.findByIdAndUpdate(org._id, { founderId: founder.id });
 
-    // Email superadmin (log errors so they surface in server logs)
-    sendOrgPendingEmail({
-      orgName,
-      orgEmail,
-      founderName,
-      founderEmail,
-    }).catch((err) => {
-      console.error("[/api/orgs] Failed to send superadmin notification email:", err?.message ?? err);
-    });
-
     return NextResponse.json(
-      { message: "Organisation application submitted. You will be notified once approved." },
+      { message: "Organisation application created. You can now sign in." },
       { status: 201 }
     );
   } catch (err) {
