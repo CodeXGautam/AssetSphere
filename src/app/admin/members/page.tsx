@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Send, CheckCircle2 } from "lucide-react";
+import { Users, Send, CheckCircle2, Copy, Check, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Member {
@@ -36,6 +36,9 @@ export default function AdminMembersPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteStatus, setInviteStatus] = useState<"idle"|"loading"|"done"|"error">("idle");
   const [inviteMsg, setInviteMsg] = useState("");
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+  const [emailFailed, setEmailFailed] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   async function loadMembers() {
     setLoading(true);
@@ -86,6 +89,8 @@ export default function AdminMembersPage() {
     }
     setInviteStatus("done");
     setInviteMsg(data.message ?? "Invite sent.");
+    setInviteUrl(data.inviteUrl ?? null);
+    setEmailFailed(!!data.emailError);
   }
 
   function closeInvite() {
@@ -93,6 +98,16 @@ export default function AdminMembersPage() {
     setInviteEmail("");
     setInviteStatus("idle");
     setInviteMsg("");
+    setInviteUrl(null);
+    setEmailFailed(false);
+    setCopied(false);
+  }
+
+  async function copyInviteUrl() {
+    if (!inviteUrl) return;
+    await navigator.clipboard.writeText(inviteUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   return (
@@ -179,11 +194,36 @@ export default function AdminMembersPage() {
       <Dialog open={inviteOpen} onClose={closeInvite} title="Invite a member" size="sm">
         {inviteStatus === "done" ? (
           <div className="flex flex-col items-center py-4 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15">
-              <CheckCircle2 size={22} className="text-emerald-400" />
+            <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${emailFailed ? "bg-amber-500/15" : "bg-emerald-500/15"}`}>
+              {emailFailed
+                ? <AlertTriangle size={22} className="text-amber-400" />
+                : <CheckCircle2  size={22} className="text-emerald-400" />
+              }
             </div>
-            <p className="text-sm font-medium text-foreground">{inviteMsg}</p>
-            <p className="mt-1 text-xs text-[--muted-fg]">They will receive an email with a sign-up link.</p>
+            <p className="text-sm font-medium text-foreground">
+              {emailFailed ? "Invite created — email delivery failed" : "Invite sent!"}
+            </p>
+            <p className="mt-1 text-xs text-[--muted-fg]">
+              {emailFailed
+                ? "Email could not be delivered. Share the link below manually."
+                : "They will receive an email with a sign-up link."
+              }
+            </p>
+            {inviteUrl && (
+              <div className="mt-3 w-full space-y-1.5">
+                <p className="text-left text-xs font-medium text-[--muted-fg]">Invite link</p>
+                <div className="flex items-center gap-2 rounded-lg border border-[--border] bg-[--muted]/40 px-3 py-2">
+                  <span className="min-w-0 flex-1 truncate text-xs text-[--muted-fg]">{inviteUrl}</span>
+                  <button
+                    onClick={copyInviteUrl}
+                    className="shrink-0 rounded p-1 text-[--muted-fg] transition-colors hover:bg-[--muted] hover:text-foreground"
+                    title="Copy link"
+                  >
+                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                  </button>
+                </div>
+              </div>
+            )}
             <Button className="mt-4" size="sm" onClick={closeInvite}>Done</Button>
           </div>
         ) : (
