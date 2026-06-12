@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 
 const TITLES: Record<string, string> = {
@@ -25,13 +25,28 @@ function getTitle(p: string) {
   return "AssetSphere";
 }
 
-export function Topbar() {
+interface TopbarProps {
+  onMenuClick?: () => void;
+}
+
+export function Topbar({ onMenuClick }: TopbarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
 
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between border-b border-[--border] bg-[--card] px-5">
-      <h1 className="text-sm font-medium text-foreground">{getTitle(pathname)}</h1>
+    <header className="flex h-12 shrink-0 items-center justify-between border-b border-[--border] bg-[--card] px-4">
+      <div className="flex items-center gap-3">
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={onMenuClick}
+          className="rounded-md p-1.5 text-[--muted-fg] transition-colors hover:bg-[--muted] hover:text-foreground md:hidden"
+          aria-label="Open menu"
+        >
+          <Menu size={17} />
+        </button>
+        <h1 className="text-sm font-medium text-foreground">{getTitle(pathname)}</h1>
+      </div>
+
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <Avatar name={session?.user?.name} size="sm" />

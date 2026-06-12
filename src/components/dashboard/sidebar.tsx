@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   LayoutDashboard, Package, BookOpen, Bell,
-  ClipboardList, ShieldCheck, Tags, Layers, Users, Building2,
+  ClipboardList, ShieldCheck, Tags, Layers, Users, Building2, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,24 +35,38 @@ const USER_NAV = [
   { label: "Notifications", href: "/notifications", icon: Bell },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const isSuperAdmin = session?.user?.isSuperAdmin === true;
   const isOrgAdmin   = session?.user?.orgRole === "ORG_ADMIN";
 
   const nav = isSuperAdmin ? SUPERADMIN_NAV : isOrgAdmin ? ADMIN_NAV : USER_NAV;
-
   const roleLabel = isSuperAdmin ? "Super Admin" : isOrgAdmin ? "Org Admin" : "Member";
 
-  return (
-    <aside className="flex h-screen w-[220px] shrink-0 flex-col border-r border-[--border] bg-[--card]">
+  const sidebarContent = (
+    <aside className="flex h-full w-[220px] shrink-0 flex-col border-r border-[--border] bg-[--card]">
       {/* Brand */}
-      <div className="flex h-12 items-center gap-2.5 border-b border-[--border] px-4">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[--primary]">
-          <Layers size={13} className="text-white" />
+      <div className="flex h-12 items-center justify-between border-b border-[--border] px-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[--primary]">
+            <Layers size={13} className="text-white" />
+          </div>
+          <span className="text-sm font-semibold text-foreground">AssetSphere</span>
         </div>
-        <span className="text-sm font-semibold text-foreground">AssetSphere</span>
+        {/* Close button — mobile only */}
+        <button
+          onClick={onMobileClose}
+          className="rounded-md p-1 text-[--muted-fg] transition-colors hover:bg-[--muted] hover:text-foreground md:hidden"
+          aria-label="Close menu"
+        >
+          <X size={15} />
+        </button>
       </div>
 
       {/* Nav */}
@@ -66,8 +80,9 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onMobileClose}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors",
                 active
                   ? "bg-[--primary]/10 text-[--primary] font-medium"
                   : "text-[--muted-fg] hover:bg-[--muted] hover:text-foreground"
@@ -87,5 +102,30 @@ export function Sidebar() {
         </p>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar — always visible */}
+      <div className="hidden md:flex h-screen">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            onClick={onMobileClose}
+            aria-hidden
+          />
+          {/* Drawer */}
+          <div className="fixed inset-y-0 left-0 z-50 h-full md:hidden">
+            {sidebarContent}
+          </div>
+        </>
+      )}
+    </>
   );
 }
