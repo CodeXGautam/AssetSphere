@@ -128,6 +128,32 @@ function FeaturePanel({ icon: Icon, num, title, body, detail }: {
   );
 }
 
+function FeatureSlide({
+  feature,
+  visual,
+  scrollYProgress,
+  range,
+}: {
+  feature: typeof FEATURES[0];
+  visual: typeof FEATURE_VISUALS[0];
+  scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  range: [number, number];
+}) {
+  const [start, end] = range;
+  const progress = useTransform<number, number>(scrollYProgress, [start, end], [0, 1]);
+  const opacity  = useTransform<number, number>(progress, [0, 0.12, 0.88, 1], [0, 1, 1, 0]);
+  const y        = useTransform<number, number>(progress, [0, 0.12, 0.88, 1], [28, 0, 0, -28]);
+
+  return (
+    <motion.div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+      <FeatureBg progress={progress} visual={visual} />
+      <motion.div style={{ position: "absolute", inset: 0, opacity, y }}>
+        <FeaturePanel {...feature} icon={feature.icon} />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function Features() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -147,27 +173,15 @@ export function Features() {
 
         {/* Feature panels */}
         <div className="relative flex-1 overflow-hidden">
-          {FEATURES.map((f, i) => {
-            const [start, end] = ranges[i];
-            const progress = useTransform<number, number>(scrollYProgress, [start, end], [0, 1]);
-            const opacity  = useTransform<number, number>(progress, [0, 0.12, 0.88, 1], [0, 1, 1, 0]);
-            const y        = useTransform<number, number>(progress, [0, 0.12, 0.88, 1], [28, 0, 0, -28]);
-
-            return (
-              <motion.div
-                key={f.num}
-                style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-              >
-                {/* Per-feature animated background */}
-                <FeatureBg progress={progress} visual={FEATURE_VISUALS[i]} />
-
-                {/* Content */}
-                <motion.div style={{ position: "absolute", inset: 0, opacity, y }}>
-                  <FeaturePanel {...f} icon={f.icon} />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+          {FEATURES.map((f, i) => (
+            <FeatureSlide
+              key={f.num}
+              feature={f}
+              visual={FEATURE_VISUALS[i]}
+              scrollYProgress={scrollYProgress}
+              range={ranges[i]}
+            />
+          ))}
         </div>
       </div>
     </section>
