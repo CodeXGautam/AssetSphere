@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { loginSchema, registerSchema } from "@/validators/auth";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -77,77 +78,77 @@ export function AuthForm({ mode }: AuthFormProps) {
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       {mode === "register" && (
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-zinc-300">Full name</label>
+          <label className="text-sm font-medium text-[--muted-fg]">Full name</label>
           <div className="relative">
-            <User size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <User size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[--muted-fg]" />
             <input
               {...form.register("name")}
               placeholder="Your full name"
               className={cn(
-                "h-10 w-full rounded-xl border bg-zinc-900/60 pl-9 pr-3 text-sm text-foreground",
-                "placeholder:text-zinc-600 transition-all",
-                "border-zinc-800 focus:border-indigo-500/60 focus:bg-zinc-900",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30",
+                "h-10 w-full rounded-xl border bg-[--input] pl-9 pr-3 text-sm text-foreground",
+                "placeholder:text-[--muted-fg] transition-all",
+                "border-[--border] focus:border-[--primary] focus:bg-[--bg-subtle]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring]",
                 form.formState.errors.name && "border-red-500/60"
               )}
             />
           </div>
           {form.formState.errors.name && (
-            <p className="text-xs text-red-400">{form.formState.errors.name.message}</p>
+            <p className="text-xs text-red-500">{form.formState.errors.name.message}</p>
           )}
         </div>
       )}
 
       {/* Email */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-zinc-300">Email address</label>
+        <label className="text-sm font-medium text-[--muted-fg]">Email address</label>
         <div className="relative">
-          <Mail size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+          <Mail size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[--muted-fg]" />
           <input
             {...form.register("email")}
             type="email"
             placeholder="you@company.com"
             className={cn(
-              "h-10 w-full rounded-xl border bg-zinc-900/60 pl-9 pr-3 text-sm text-foreground",
-              "placeholder:text-zinc-600 transition-all",
-              "border-zinc-800 focus:border-indigo-500/60 focus:bg-zinc-900",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30",
+              "h-10 w-full rounded-xl border bg-[--input] pl-9 pr-3 text-sm text-foreground",
+              "placeholder:text-[--muted-fg] transition-all",
+              "border-[--border] focus:border-[--primary] focus:bg-[--bg-subtle]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring]",
               form.formState.errors.email && "border-red-500/60"
             )}
           />
         </div>
         {form.formState.errors.email && (
-          <p className="text-xs text-red-400">{form.formState.errors.email.message}</p>
+          <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
         )}
       </div>
 
       {/* Password */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-zinc-300">Password</label>
+        <label className="text-sm font-medium text-[--muted-fg]">Password</label>
         <div className="relative">
-          <Lock size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+          <Lock size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[--muted-fg]" />
           <input
             {...form.register("password")}
             type={showPassword ? "text" : "password"}
             placeholder={mode === "register" ? "At least 8 characters" : "Your password"}
             className={cn(
-              "h-10 w-full rounded-xl border bg-zinc-900/60 pl-9 pr-10 text-sm text-foreground",
-              "placeholder:text-zinc-600 transition-all",
-              "border-zinc-800 focus:border-indigo-500/60 focus:bg-zinc-900",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30",
+              "h-10 w-full rounded-xl border bg-[--input] pl-9 pr-10 text-sm text-foreground",
+              "placeholder:text-[--muted-fg] transition-all",
+              "border-[--border] focus:border-[--primary] focus:bg-[--bg-subtle]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring]",
               form.formState.errors.password && "border-red-500/60"
             )}
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[--muted-fg] hover:text-foreground"
           >
             {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
           </button>
         </div>
         {form.formState.errors.password && (
-          <p className="text-xs text-red-400">{form.formState.errors.password.message}</p>
+          <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
         )}
       </div>
 
@@ -156,7 +157,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <motion.div
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500"
         >
           {error}
         </motion.div>
@@ -165,24 +166,24 @@ export function AuthForm({ mode }: AuthFormProps) {
       <Button
         type="submit"
         loading={loading}
-        className="w-full rounded-xl bg-indigo-600 text-white hover:bg-indigo-500 h-10"
+        className="w-full rounded-xl h-10"
       >
         {mode === "register" ? "Create account" : "Sign in"}
         <ArrowRight size={15} />
       </Button>
 
-      <p className="text-center text-sm text-zinc-500">
+      <p className="text-center text-sm text-[--muted-fg]">
         {mode === "login" ? (
           <>
             New to AssetSphere?{" "}
-            <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">
+            <Link href="/register" className="text-[--primary] hover:underline font-medium">
               Create an account
             </Link>
           </>
         ) : (
           <>
             Already have access?{" "}
-            <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
+            <Link href="/login" className="text-[--primary] hover:underline font-medium">
               Sign in
             </Link>
           </>
@@ -194,17 +195,22 @@ export function AuthForm({ mode }: AuthFormProps) {
 
 export function AuthPageShell({ mode }: { mode: FormMode }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[--bg] px-4">
+      {/* Theme toggle — top-right */}
+      <div className="absolute right-4 top-4 z-20">
+        <ThemeToggle />
+      </div>
+
       {/* Background glows */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[60vh] w-[60vw] -translate-x-1/2 rounded-full bg-indigo-600/8 blur-[100px]" />
+        <div className="absolute left-1/2 top-0 h-[60vh] w-[60vw] -translate-x-1/2 rounded-full bg-[--primary]/8 blur-[100px]" />
         <div className="absolute bottom-0 right-0 h-[40vh] w-[40vw] rounded-full bg-violet-600/8 blur-[100px]" />
         {/* Grid */}
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+              "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
             backgroundSize: "60px 60px",
           }}
         />
@@ -218,14 +224,14 @@ export function AuthPageShell({ mode }: { mode: FormMode }) {
       >
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-linear-to-br from-indigo-500 to-violet-600 shadow-[0_0_24px_rgba(99,102,241,0.4)]">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[--primary] shadow-[0_0_24px_rgba(99,102,241,0.35)]">
             <Layers size={20} className="text-white" />
           </div>
           <div className="text-center">
             <h1 className="text-xl font-semibold text-foreground">
               {mode === "login" ? "Welcome back" : "Create your account"}
             </h1>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-[--muted-fg]">
               {mode === "login"
                 ? "Sign in to your AssetSphere workspace"
                 : "Join AssetSphere and start managing assets"}
@@ -234,7 +240,7 @@ export function AuthPageShell({ mode }: { mode: FormMode }) {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-6 backdrop-blur-sm shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+        <div className="rounded-2xl border border-[--border] bg-[--card] p-6 shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
           <AuthForm mode={mode} />
         </div>
       </motion.div>
