@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Building2, CheckCircle2, Layers, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
 
 interface FormState {
@@ -132,6 +133,11 @@ export default function OnboardPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[--background] px-4 py-12">
+      {/* Theme toggle */}
+      <div className="absolute right-4 top-4 z-20">
+        <ThemeToggle />
+      </div>
+
       {/* Background glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute left-1/2 top-0 h-[50vh] w-[60vw] -translate-x-1/2 rounded-full bg-[--primary]/8 blur-[100px]" />
