@@ -6,6 +6,14 @@
 
 ---
 
+# 🎬 DEMO VIDEO
+
+## **[▶ Watch the Full Demo on YouTube](https://youtu.be/xM29EAo8yog)**
+
+> See AssetSphere in action — org setup, asset management, booking workflow, analytics, and more.
+
+---
+
 ## Screenshots
 
 ### Landing Page
