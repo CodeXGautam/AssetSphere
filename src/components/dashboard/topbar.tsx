@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { LogOut, Menu } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const TITLES: Record<string, string> = {
   "/dashboard":         "Dashboard",
@@ -63,6 +64,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             </span>
           </div>
         </div>
+        <ThemeToggle />
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
           className="rounded-md p-1.5 text-[--muted-fg] transition-colors hover:bg-[--muted] hover:text-foreground"

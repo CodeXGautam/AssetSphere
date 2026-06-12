@@ -96,11 +96,11 @@ export function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -8 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-[0_25px_80px_rgba(0,0,0,0.7)]"
+            className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-[--border] bg-[--card] shadow-[0_25px_80px_rgba(0,0,0,0.25)]"
           >
             {/* Search input */}
-            <div className="flex items-center gap-3 border-b border-zinc-800/60 px-4 py-3">
-              <Search size={15} className="shrink-0 text-zinc-500" />
+            <div className="flex items-center gap-3 border-b border-[--border] px-4 py-3">
+              <Search size={15} className="shrink-0 text-[--muted-fg]" />
               <input
                 autoFocus
                 value={query}
@@ -109,17 +109,17 @@ export function CommandPalette() {
                   setSelected(0);
                 }}
                 placeholder="Search pages and actions..."
-                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-zinc-600 focus:outline-none"
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-[--muted-fg] focus:outline-none"
               />
               {query && (
                 <button
                   onClick={() => setQuery("")}
-                  className="text-zinc-500 hover:text-zinc-300"
+                  className="text-[--muted-fg] hover:text-foreground"
                 >
                   <X size={14} />
                 </button>
               )}
-              <kbd className="rounded border border-zinc-700/60 bg-zinc-800/60 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">
+              <kbd className="rounded border border-[--border] bg-[--muted] px-1.5 py-0.5 font-mono text-[10px] text-[--muted-fg]">
                 ESC
               </kbd>
             </div>
@@ -127,7 +127,7 @@ export function CommandPalette() {
             {/* Results */}
             <div className="py-1.5">
               {actions.length === 0 ? (
-                <p className="px-4 py-6 text-center text-sm text-zinc-600">
+                <p className="px-4 py-6 text-center text-sm text-[--muted-fg]">
                   No results found
                 </p>
               ) : (
@@ -140,12 +140,12 @@ export function CommandPalette() {
                       className={cn(
                         "flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors",
                         i === selected
-                          ? "bg-indigo-500/15 text-indigo-300"
-                          : "text-zinc-300 hover:bg-zinc-800/60"
+                          ? "bg-[--primary]/10 text-[--primary]"
+                          : "text-foreground hover:bg-[--muted]"
                       )}
                       onMouseEnter={() => setSelected(i)}
                     >
-                      <Icon size={15} className="shrink-0 text-zinc-500" />
+                      <Icon size={15} className="shrink-0 text-[--muted-fg]" />
                       {action.label}
                     </button>
                   );
@@ -154,8 +154,8 @@ export function CommandPalette() {
             </div>
 
             {/* Footer hints */}
-            <div className="border-t border-zinc-800/60 px-4 py-2">
-              <div className="flex items-center gap-3 text-[10px] text-zinc-600">
+            <div className="border-t border-[--border] px-4 py-2">
+              <div className="flex items-center gap-3 text-[10px] text-[--muted-fg]">
                 <span><kbd className="font-mono">Up/Down</kbd> navigate</span>
                 <span><kbd className="font-mono">Enter</kbd> open</span>
                 <span><kbd className="font-mono">Esc</kbd> close</span>
