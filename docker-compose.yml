@@ -1,0 +1,63 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: assetsphere_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: assetsphere
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - assetsphere_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assetsphere_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      # MongoDB — points to the mongodb service on the internal network
+      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_DB: assetsphere
+
+      # NextAuth — generate with: openssl rand -base64 32
+      AUTH_SECRET: ${AUTH_SECRET:-change_me_in_production}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+
+      # Superadmin
+      SUPERADMIN_EMAIL: ${SUPERADMIN_EMAIL:-}
+      SEED_SECRET: ${SEED_SECRET:-}
+
+      # SendGrid (optional)
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY:-}
+      SENDGRID_FROM_EMAIL: ${SENDGRID_FROM_EMAIL:-noreply@assetsphere.app}
+
+      # Cloudinary (optional)
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+
+      NODE_ENV: production
+    networks:
+      - assetsphere_net
+
+volumes:
+  mongo_data:
+    name: assetsphere_mongo_data
+
+networks:
+  assetsphere_net:
+    name: assetsphere_net
+    driver: bridge
