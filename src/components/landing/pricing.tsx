@@ -63,7 +63,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-3 text-xs uppercase tracking-[0.3em] text-cyan-400/70"
+          className="mb-3 text-xs uppercase tracking-[0.3em] text-[--primary]"
         >
           Pricing
         </motion.p>
@@ -72,7 +72,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl font-semibold text-white md:text-5xl"
+          className="text-4xl font-semibold text-[--fg] md:text-5xl"
         >
           Simple, transparent pricing.
         </motion.h2>
@@ -89,29 +89,29 @@ export function PricingSection() {
             className={cn(
               "relative flex flex-col rounded-2xl border p-8",
               tier.featured
-                ? "border-cyan-500/40 bg-linear-to-b from-cyan-500/10 to-[#07090d] shadow-[0_0_60px_rgba(34,211,238,0.15)]"
-                : "border-white/10 bg-[#0d1117]"
+                ? "border-[--primary]/40 bg-[--primary]/5 shadow-[0_0_60px_rgba(91,94,244,0.12)]"
+                : "border-[--border] bg-[--bg-subtle]"
             )}
           >
             {tier.featured && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-cyan-400 px-4 py-1 text-xs font-medium text-[#07090d]">
+                <span className="rounded-full bg-[--primary] px-4 py-1 text-xs font-medium text-white">
                   Most popular
                 </span>
               </div>
             )}
 
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-white">{tier.name}</h3>
+              <h3 className="text-lg font-semibold text-[--fg]">{tier.name}</h3>
               <div className="mt-3 flex items-baseline gap-1">
-                <span className="text-4xl font-semibold text-white">
+                <span className="text-4xl font-semibold text-[--fg]">
                   {tier.price}
                 </span>
                 {tier.period && (
-                  <span className="text-sm text-white/40">{tier.period}</span>
+                  <span className="text-sm text-[--fg-muted]">{tier.period}</span>
                 )}
               </div>
-              <p className="mt-2 text-sm text-white/45">{tier.description}</p>
+              <p className="mt-2 text-sm text-[--fg-muted]">{tier.description}</p>
             </div>
 
             <ul className="mb-8 flex-1 space-y-3">
@@ -119,23 +119,16 @@ export function PricingSection() {
                 <li key={item} className="flex items-center gap-3 text-sm">
                   <Check
                     size={14}
-                    className={
-                      tier.featured ? "text-cyan-400" : "text-white/40"
-                    }
+                    className={tier.featured ? "text-[--primary]" : "text-[--fg-muted]"}
                   />
-                  <span className="text-white/60">{item}</span>
+                  <span className="text-[--fg-muted]">{item}</span>
                 </li>
               ))}
             </ul>
 
             <Button
               variant={tier.featured ? "default" : "outline"}
-              className={cn(
-                "w-full rounded-full",
-                tier.featured
-                  ? "bg-cyan-400 text-[#07090d] hover:bg-cyan-300"
-                  : "border-white/20 text-white hover:bg-white/10"
-              )}
+              className="w-full rounded-full"
             >
               {tier.price === "Custom" ? "Talk to sales" : "Get started"}
             </Button>

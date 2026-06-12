@@ -160,7 +160,7 @@ export function Hero() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex h-11 items-center rounded-xl border border-[--border] bg-[--bg-subtle] px-5 text-sm text-[--fg-muted] transition-colors hover:border-[--fg-subtle]/50 hover:text-[--fg]"
+              className="inline-flex h-11 items-center rounded-xl border border-[--border] bg-[--surface] px-5 text-sm font-medium text-[--fg] transition-colors hover:bg-[--muted]"
             >
               Sign in
             </Link>

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X, Layers, Sun, Moon } from "lucide-react";
+import { Menu, X, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type Theme, getTheme, setTheme } from "@/lib/theme";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const NAV = [
   { label: "How it works", href: "#how-it-works" },
@@ -13,22 +13,14 @@ const NAV = [
 ];
 
 export function LandingNav() {
-  const [scrolled,   setScrolled]   = useState(false);
-  const [open,       setOpen]       = useState(false);
-  const [theme,      setThemeState] = useState<Theme>("dark");
+  const [scrolled, setScrolled] = useState(false);
+  const [open,     setOpen]     = useState(false);
 
   useEffect(() => {
-    setThemeState(getTheme());
     const fn = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
-
-  function toggle() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    setThemeState(next);
-  }
 
   return (
     <header
@@ -65,13 +57,7 @@ export function LandingNav() {
 
         {/* Desktop right actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <button
-            onClick={toggle}
-            aria-label="Toggle theme"
-            className="rounded-lg p-1.5 text-[--fg-muted] transition-colors hover:bg-[--surface] hover:text-[--fg]"
-          >
-            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
+          <ThemeToggle />
           <Link
             href="/login"
             className="rounded-lg px-3 py-1.5 text-sm text-[--fg-muted] transition-colors hover:text-[--fg]"
@@ -88,9 +74,7 @@ export function LandingNav() {
 
         {/* Mobile */}
         <div className="flex items-center gap-1.5 md:hidden">
-          <button onClick={toggle} className="rounded-lg p-1.5 text-[--fg-muted]">
-            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
+          <ThemeToggle />
           <button onClick={() => setOpen((v) => !v)} className="rounded-lg p-1.5 text-[--fg-muted]">
             {open ? <X size={16} /> : <Menu size={16} />}
           </button>
@@ -112,7 +96,7 @@ export function LandingNav() {
               </a>
             ))}
             <div className="flex flex-col gap-2 border-t border-[--border] pt-3 mt-1">
-              <Link href="/login"   className="text-sm text-[--fg-muted]">Sign in</Link>
+              <Link href="/login" className="text-sm text-[--fg-muted]">Sign in</Link>
               <Link
                 href="/onboard"
                 className="inline-flex h-9 items-center justify-center rounded-lg bg-[--primary] px-4 text-sm font-medium text-white"
