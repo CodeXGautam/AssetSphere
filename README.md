@@ -2,6 +2,36 @@
 
 **AssetSphere** is a multi-tenant asset management platform built for organisations to track, book, and manage physical assets — from laptops and projectors to lab equipment and vehicles. It supports a full request-and-approval booking lifecycle, role-based access, QR-code scanning, image uploads, email notifications, and a real-time analytics dashboard.
 
+**Live demo → [https://assetsphere.vercel.app](https://assetsphere.vercel.app)**
+
+---
+
+## Screenshots
+
+### Landing Page
+![Landing Page](public/landing-page.png)
+
+### Dashboard — Dark Mode
+![Dashboard Dark](public/dashboard-dark.png)
+
+### Dashboard — Light Mode
+![Dashboard Light](public/dashboard-light.png)
+
+### Asset Management
+![Asset Page](public/asset-page.png)
+
+### Bookings
+![Bookings Page](public/bookings-page.png)
+
+### Categories
+![Category Page](public/category-page.png)
+
+### Members
+![Members Page](public/members-page.png)
+
+### Audit Logs
+![Audit Logs Page](public/audit-logs-page.png)
+
 ---
 
 ## Table of Contents
