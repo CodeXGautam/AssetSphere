@@ -59,12 +59,31 @@ export async function POST(request: Request) {
     expiresAt: inviteExpiry(),
   });
 
-  sendInviteEmail({
-    to:          email,
-    orgName:     org.name,
-    inviterName: inviter?.name ?? "An admin",
-    token,
-  }).catch(() => {});
+  const appUrl    = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+  const inviteUrl = `${appUrl}/invite/${token}`;
 
-  return NextResponse.json({ message: `Invite sent to ${email}.` }, { status: 201 });
+  let emailError: string | null = null;
+  try {
+    await sendInviteEmail({
+      to:          email,
+      orgName:     org.name,
+      inviterName: inviter?.name ?? "An admin",
+      token,
+    });
+  } catch (err: unknown) {
+    const e = err as { message?: string };
+    emailError = e?.message ?? "Email delivery failed";
+    console.error("[invite] sendInviteEmail failed — token still valid:", { email, inviteUrl, error: emailError });
+  }
+
+  return NextResponse.json(
+    {
+      message:   emailError
+        ? `Invite created but email delivery failed. Share this link manually: ${inviteUrl}`
+        : `Invite sent to ${email}.`,
+      inviteUrl, // always returned — handy for dev/staging even when email works
+      emailError: emailError ?? undefined,
+    },
+    { status: 201 }
+  );
 }
