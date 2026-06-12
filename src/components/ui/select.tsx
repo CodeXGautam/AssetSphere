@@ -34,7 +34,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           >
             {placeholder && <option value="">{placeholder}</option>}
             {options.map((o) => (
-              <option key={o.value} value={o.value} className="bg-[#111114]">
+              <option key={o.value} value={o.value} className="bg-[--card] text-foreground">
                 {o.label}
               </option>
             ))}

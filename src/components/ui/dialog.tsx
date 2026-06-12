@@ -59,10 +59,8 @@ export function Dialog({
             exit={{ opacity: 0, scale: 0.97, y: 8 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              // Solid background — no transparency
               "relative z-10 flex w-full flex-col rounded-xl border border-[--border]",
-              "bg-[#0f0f12] shadow-[0_24px_80px_rgba(0,0,0,0.6)]",
-              // Max height so tall content scrolls inside the dialog
+              "bg-[--card] shadow-[0_24px_80px_rgba(0,0,0,0.35)]",
               "max-h-[calc(100vh-2rem)] overflow-hidden",
               SIZE[size],
               className
