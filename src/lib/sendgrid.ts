@@ -19,7 +19,21 @@ async function send(to: string, subject: string, html: string): Promise<void> {
     return;
   }
   sgMail.setApiKey(apiKey);
-  await sgMail.send({ to, from: fromEmail, subject, html });
+  try {
+    await sgMail.send({ to, from: fromEmail, subject, html });
+    console.info("[email sent]", { to, subject });
+  } catch (err: unknown) {
+    // Log the full SendGrid error body so you can diagnose delivery failures
+    // (expired subscription, unverified sender domain, bad API key, etc.)
+    const sgErr = err as { response?: { body?: unknown }; message?: string };
+    console.error("[email send FAILED]", {
+      to,
+      subject,
+      message: sgErr?.message,
+      body: sgErr?.response?.body ?? null,
+    });
+    throw err; // re-throw so callers can handle / surface the failure
+  }
 }
 
 export async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }) {
