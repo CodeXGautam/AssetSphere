@@ -114,6 +114,28 @@ function StepPanel({ icon: Icon, step, title, body }: {
   );
 }
 
+function StepSlide({
+  step,
+  visual,
+  prog,
+}: {
+  step: typeof STEPS[0];
+  visual: typeof STEP_VISUALS[0];
+  prog: ReturnType<typeof useTransform<number, number>>;
+}) {
+  const opacity = useTransform<number, number>(prog, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  const y       = useTransform<number, number>(prog, [0, 0.15, 0.85, 1], [24, 0, 0, -24]);
+
+  return (
+    <motion.div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+      <StepBg progress={prog} visual={visual} />
+      <motion.div style={{ position: "absolute", inset: 0, opacity, y }}>
+        <StepPanel {...step} icon={step.icon} />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function HowItWorks() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -137,25 +159,14 @@ export function HowItWorks() {
 
         {/* Layered panels */}
         <div className="relative flex-1 overflow-hidden">
-          {STEPS.map((s, i) => {
-            const prog = progValues[i];
-            const opacity = useTransform<number, number>(prog, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
-            const y       = useTransform<number, number>(prog, [0, 0.15, 0.85, 1], [24, 0, 0, -24]);
-            return (
-              <motion.div
-                key={s.step}
-                style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-              >
-                {/* Background layer for this step */}
-                <StepBg progress={prog} visual={STEP_VISUALS[i]} />
-
-                {/* Content layer */}
-                <motion.div style={{ position: "absolute", inset: 0, opacity, y }}>
-                  <StepPanel {...s} icon={s.icon} />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+          {STEPS.map((s, i) => (
+            <StepSlide
+              key={s.step}
+              step={s}
+              visual={STEP_VISUALS[i]}
+              prog={progValues[i]}
+            />
+          ))}
         </div>
       </div>
     </section>
