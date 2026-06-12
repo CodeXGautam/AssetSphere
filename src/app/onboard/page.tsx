@@ -117,14 +117,14 @@ export default function OnboardPage() {
           className="w-full max-w-sm text-center"
         >
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15">
-            <CheckCircle2 size={28} className="text-emerald-400" />
+            <CheckCircle2 size={28} className="text-emerald-500" />
           </div>
-          <h1 className="text-lg font-semibold text-foreground">Application submitted!</h1>
+          <h1 className="text-lg font-semibold text-foreground">Organisation created!</h1>
           <p className="mt-2 text-sm text-[--muted-fg]">
-            Your organisation request has been sent for review. You will receive an email once it is approved.
+            Your organisation is ready. Sign in to start managing your assets.
           </p>
           <Link href="/login">
-            <Button className="mt-6">Back to sign in</Button>
+            <Button className="mt-6">Sign in now</Button>
           </Link>
         </motion.div>
       </div>
@@ -157,7 +157,7 @@ export default function OnboardPage() {
           <div className="text-center">
             <h1 className="text-lg font-semibold text-foreground">Create your organisation</h1>
             <p className="mt-1 text-sm text-[--muted-fg]">
-              Fill in the details below. Our team will review and approve your request.
+              Set up your organisation and get started in seconds.
             </p>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function OnboardPage() {
               loading={status === "loading"}
               className="w-full"
             >
-              Submit application
+              Create organisation
               <ArrowRight size={14} />
             </Button>
           </form>

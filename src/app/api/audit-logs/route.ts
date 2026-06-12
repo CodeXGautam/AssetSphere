@@ -9,6 +9,8 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const logs = await auditLogService.list();
+  // Superadmin sees all logs; org admins see only their org's logs
+  const orgId = session?.user?.isSuperAdmin ? null : (session?.user?.orgId ?? null);
+  const logs  = await auditLogService.list(orgId);
   return NextResponse.json({ logs });
 }

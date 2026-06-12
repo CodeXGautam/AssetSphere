@@ -1,5 +1,6 @@
 import { connectToDatabase } from "@/lib/db";
 import { AuditLog } from "@/models/audit-log";
+import mongoose from "mongoose";
 
 export const auditLogService = {
   async record({
@@ -8,12 +9,14 @@ export const auditLogService = {
     entity,
     entityId,
     metadata,
+    orgId,
   }: {
-    actorId?: string;
-    action: string;
-    entity: string;
+    actorId?:  string;
+    action:    string;
+    entity:    string;
     entityId?: string;
     metadata?: Record<string, unknown>;
+    orgId?:    string;
   }) {
     await connectToDatabase();
     return AuditLog.create({
@@ -22,11 +25,13 @@ export const auditLogService = {
       entity,
       entityId,
       metadata,
+      orgId: orgId ? new mongoose.Types.ObjectId(orgId) : undefined,
     });
   },
 
-  async list(limit = 50) {
+  async list(orgId?: string | null, limit = 50) {
     await connectToDatabase();
-    return AuditLog.find().sort({ createdAt: -1 }).limit(limit).lean();
+    const filter = orgId ? { orgId: new mongoose.Types.ObjectId(orgId) } : {};
+    return AuditLog.find(filter).sort({ createdAt: -1 }).limit(limit).lean();
   },
 };

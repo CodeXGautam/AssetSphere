@@ -2,9 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const AuditLogSchema = new Schema(
   {
-    actorId: { type: Schema.Types.ObjectId, ref: "User" },
-    action: { type: String, required: true },
-    entity: { type: String, required: true },
+    actorId:  { type: Schema.Types.ObjectId, ref: "User" },
+    orgId:    { type: Schema.Types.ObjectId, ref: "Organisation", index: true },
+    action:   { type: String, required: true },
+    entity:   { type: String, required: true },
     entityId: { type: Schema.Types.ObjectId },
     metadata: { type: Schema.Types.Mixed },
   },

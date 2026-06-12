@@ -6,10 +6,16 @@ import { isOrgAdmin, isSuperAdmin } from "@/lib/permissions";
 
 export async function GET() {
   const session = await auth();
+  const userId  = session?.user?.id;
+  const orgId   = session?.user?.orgId ?? undefined;
+
+  const isAdmin = isOrgAdmin(session?.user?.orgRole) || isSuperAdmin(session?.user?.isSuperAdmin);
+
+  // Admins see all bookings for their org's assets; members see only their own
   const bookings = await bookingService.list(
-    (isOrgAdmin(session?.user?.orgRole) || isSuperAdmin(session?.user?.isSuperAdmin))
-      ? undefined
-      : session?.user?.id
+    isAdmin ? undefined : userId,
+    // Pass orgId so admin list is still scoped to their org (not platform-wide)
+    isAdmin ? orgId : undefined
   );
   return NextResponse.json({ bookings });
 }

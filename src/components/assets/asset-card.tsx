@@ -99,7 +99,7 @@ export function AssetCard({
           {/* Details — always active */}
           <Link
             href={`/assets/${id}`}
-            className="flex items-center justify-center rounded-lg border border-[--border] bg-[--bg-subtle] px-3 py-2 text-xs text-[--fg-muted] transition-colors hover:border-[--fg-subtle]/40 hover:text-foreground"
+            className="flex items-center justify-center rounded-lg border border-[--border] bg-[--muted] px-3 py-2 text-xs text-[--muted-fg] font-medium transition-colors hover:bg-[--surface] hover:text-foreground"
           >
             Details
           </Link>

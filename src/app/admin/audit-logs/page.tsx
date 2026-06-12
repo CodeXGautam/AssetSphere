@@ -20,15 +20,15 @@ interface AuditLog {
 }
 
 const ACTION_STYLES: Record<string, string> = {
-  USER_REGISTERED:         "bg-sky-500/10 text-sky-400 ring-sky-500/20",
+  USER_REGISTERED:         "bg-sky-500/10 text-sky-600 ring-sky-500/25",
   BOOKING_CREATED:         "bg-[--primary]/10 text-[--primary] ring-[--primary]/20",
-  BOOKING_APPROVED:        "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20",
-  BOOKING_REJECTED:        "bg-red-500/10 text-red-400 ring-red-500/20",
-  ASSET_ISSUED:            "bg-violet-500/10 text-violet-400 ring-violet-500/20",
-  ASSET_RETURNED:          "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20",
-  ASSET_CREATED:           "bg-cyan-500/10 text-cyan-400 ring-cyan-500/20",
-  ASSET_DELETED:           "bg-zinc-700/20 text-[--muted-fg] ring-[--border]",
-  ASSET_CONDITION_UPDATED: "bg-amber-500/10 text-amber-400 ring-amber-500/20",
+  BOOKING_APPROVED:        "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25",
+  BOOKING_REJECTED:        "bg-red-500/10 text-red-600 ring-red-500/25",
+  ASSET_ISSUED:            "bg-violet-500/10 text-violet-600 ring-violet-500/25",
+  ASSET_RETURNED:          "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25",
+  ASSET_CREATED:           "bg-cyan-500/10 text-cyan-600 ring-cyan-500/25",
+  ASSET_DELETED:           "bg-[--muted] text-[--muted-fg] ring-[--border]",
+  ASSET_CONDITION_UPDATED: "bg-amber-500/10 text-amber-600 ring-amber-500/25",
 };
 
 function formatTimestamp(ts: string) {

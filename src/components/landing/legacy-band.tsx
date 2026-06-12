@@ -2,35 +2,30 @@
 
 import { motion } from "framer-motion";
 
+const PILLARS = [
+  { num: "10+",   desc: "Years of domain expertise"      },
+  { num: "5M+",   desc: "Asset transactions processed"   },
+  { num: "99.9%", desc: "Platform uptime SLA"            },
+  { num: "SOC 2", desc: "Type II certified"              },
+];
+
 export function LegacyBand() {
   return (
     <section
       id="about"
-      className="relative flex min-h-[55vh] items-center overflow-hidden bg-[#07090d]"
+      className="relative flex min-h-[55vh] items-center overflow-hidden border-t border-[--border] bg-[--bg-subtle]"
     >
-      {/* Background gradient */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-linear-to-r from-[#07090d] via-[#07090d]/80 to-transparent" />
-        {/* Right side abstract grid/lines */}
-        <div className="absolute right-0 top-0 h-full w-1/2 opacity-20">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute h-px w-full bg-linear-to-r from-transparent via-cyan-400/60 to-transparent"
-              style={{ top: `${12 + i * 12}%` }}
-            />
-          ))}
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute top-0 h-full w-px bg-linear-to-b from-transparent via-sky-400/40 to-transparent"
-              style={{ left: `${10 + i * 16}%` }}
-            />
-          ))}
-        </div>
-        {/* Glow */}
-        <div className="absolute right-[20%] top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[80px]" />
-      </div>
+      {/* Decorative glow — neutral so it works in both themes */}
+      <div className="pointer-events-none absolute right-[15%] top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-[--primary]/8 blur-[80px]" />
+
+      {/* Dot grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage: "radial-gradient(circle, var(--fg) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="max-w-xl">
@@ -39,7 +34,7 @@ export function LegacyBand() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-4 text-xs uppercase tracking-[0.3em] text-cyan-400/70"
+            className="mb-4 text-xs uppercase tracking-[0.3em] text-[--primary]"
           >
             Why AssetSphere
           </motion.p>
@@ -48,7 +43,7 @@ export function LegacyBand() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-semibold leading-tight text-white md:text-5xl"
+            className="text-4xl font-semibold leading-tight text-[--fg] md:text-5xl"
           >
             Built for
             <br />
@@ -59,14 +54,13 @@ export function LegacyBand() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-base leading-relaxed text-white/50"
+            className="mt-6 text-base leading-relaxed text-[--fg-muted]"
           >
             From single-site teams to global enterprises, AssetSphere adapts to
             your scale. Every workflow, every approval, every audit trail is
-            designed to give you control -- without the complexity.
+            designed to give you control — without the complexity.
           </motion.p>
 
-          {/* Pillars */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -74,17 +68,10 @@ export function LegacyBand() {
             transition={{ duration: 0.6, delay: 0.35 }}
             className="mt-10 grid grid-cols-2 gap-6"
           >
-            {[
-              { num: "10+", desc: "Years of domain expertise" },
-              { num: "5M+", desc: "Asset transactions processed" },
-              { num: "99.9%", desc: "Platform uptime SLA" },
-              { num: "SOC 2", desc: "Type II certified" },
-            ].map((item) => (
+            {PILLARS.map((item) => (
               <div key={item.desc} className="flex flex-col gap-1">
-                <span className="text-2xl font-semibold text-white">
-                  {item.num}
-                </span>
-                <span className="text-xs text-white/40">{item.desc}</span>
+                <span className="text-2xl font-semibold text-[--fg]">{item.num}</span>
+                <span className="text-xs text-[--fg-muted]">{item.desc}</span>
               </div>
             ))}
           </motion.div>

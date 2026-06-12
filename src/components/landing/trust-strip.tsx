@@ -4,18 +4,15 @@ import { motion } from "framer-motion";
 
 const STATS = [
   { value: "28.4k+", label: "Assets under management" },
-  { value: "93%", label: "Average utilization rate" },
+  { value: "93%",    label: "Average utilization rate" },
   { value: "42 min", label: "Median approval time" },
-  { value: "300+", label: "Enterprise clients" },
-  { value: "1,280", label: "Audits processed monthly" },
+  { value: "300+",   label: "Enterprise clients" },
+  { value: "1,280",  label: "Audits processed monthly" },
 ];
 
 export function TrustStrip() {
   return (
-    <section
-      id="analytics"
-      className="border-y border-white/6 bg-[#0a0d12]"
-    >
+    <section id="analytics" className="border-y border-[--border] bg-[--bg-subtle]">
       <div className="mx-auto max-w-7xl px-6 py-14 md:px-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           {STATS.map((stat, i) => (
@@ -27,10 +24,10 @@ export function TrustStrip() {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="flex flex-col gap-1"
             >
-              <span className="text-3xl font-semibold text-white md:text-4xl">
+              <span className="text-3xl font-semibold text-[--fg] md:text-4xl">
                 {stat.value}
               </span>
-              <span className="text-xs uppercase tracking-wider text-white/40">
+              <span className="text-xs uppercase tracking-wider text-[--fg-muted]">
                 {stat.label}
               </span>
             </motion.div>

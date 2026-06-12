@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canManageAssets } from "@/lib/permissions";
 import { connectToDatabase } from "@/lib/db";
+import { Asset } from "@/models/asset";
 import { Booking } from "@/models/booking";
 import { BOOKING_STATUSES } from "@/constants";
+import mongoose from "mongoose";
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING:  "#eab308",
@@ -22,10 +24,22 @@ export async function GET() {
 
   await connectToDatabase();
 
+  const orgId = session?.user?.orgId;
+
+  let assetIdFilter: object = {};
+  if (orgId && !session?.user?.isSuperAdmin) {
+    const orgAssets = await Asset.find(
+      { orgId: new mongoose.Types.ObjectId(orgId) },
+      { _id: 1 }
+    ).lean();
+    const assetIds = orgAssets.map((a) => a._id);
+    assetIdFilter = { assetId: { $in: assetIds } };
+  }
+
   const counts = await Promise.all(
     BOOKING_STATUSES.map(async (status) => ({
       status,
-      count: await Booking.countDocuments({ status }),
+      count: await Booking.countDocuments({ ...assetIdFilter, status }),
       color: STATUS_COLORS[status] ?? "#6366f1",
     }))
   );

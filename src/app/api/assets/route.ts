@@ -5,12 +5,14 @@ import { auth } from "@/lib/auth";
 import { canManageAssets } from "@/lib/permissions";
 
 export async function GET(request: Request) {
+  const session = await auth();
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId") ?? undefined;
   const search     = searchParams.get("search")     ?? undefined;
 
-  // Assets are browseable platform-wide — no orgId filter on public list
-  const assets = await assetService.list({ categoryId, search });
+  // Assets are scoped to the user's org — members only see their own org's assets
+  const orgId = session?.user?.orgId ?? undefined;
+  const assets = await assetService.list({ categoryId, search, orgId });
   return NextResponse.json({ assets });
 }
 
@@ -21,7 +23,6 @@ export async function POST(request: Request) {
   }
 
   const orgId = session?.user?.orgId;
-  // Superadmin can create assets without an org — use a special handling
   if (!orgId && !session?.user?.isSuperAdmin) {
     return NextResponse.json(
       { error: "You must belong to an organisation to add assets." },

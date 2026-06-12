@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canManageAssets } from "@/lib/permissions";
 import { connectToDatabase } from "@/lib/db";
+import { Asset } from "@/models/asset";
 import { Booking } from "@/models/booking";
+import mongoose from "mongoose";
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -14,13 +16,26 @@ export async function GET() {
 
   await connectToDatabase();
 
+  const orgId = session?.user?.orgId;
+
+  // Build booking filter scoped to org's assets
+  let bookingFilter: object = {};
+  if (orgId && !session?.user?.isSuperAdmin) {
+    const orgAssets = await Asset.find(
+      { orgId: new mongoose.Types.ObjectId(orgId) },
+      { _id: 1 }
+    ).lean();
+    const assetIds = orgAssets.map((a) => a._id);
+    bookingFilter = { assetId: { $in: assetIds } };
+  }
+
   const twelveMonthsAgo = new Date();
   twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 11);
   twelveMonthsAgo.setDate(1);
   twelveMonthsAgo.setHours(0, 0, 0, 0);
 
   const raw = await Booking.aggregate([
-    { $match: { createdAt: { $gte: twelveMonthsAgo } } },
+    { $match: { ...bookingFilter, createdAt: { $gte: twelveMonthsAgo } } },
     { $group: {
       _id:   { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
       count: { $sum: 1 },
@@ -28,7 +43,6 @@ export async function GET() {
     { $sort: { "_id.year": 1, "_id.month": 1 } },
   ]);
 
-  // Build full 12-month array with zeros for months with no bookings
   const dataMap = new Map(raw.map((r) => [`${r._id.year}-${r._id.month}`, r.count]));
   const result = [];
   for (let i = 11; i >= 0; i--) {

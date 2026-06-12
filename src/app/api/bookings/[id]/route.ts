@@ -45,6 +45,14 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Booking not found" }, { status: 404 });
   }
 
+  // --- Org isolation: non-superadmin admins can only act on bookings for their own org's assets ---
+  if (!session?.user?.isSuperAdmin && session?.user?.orgId) {
+    const asset = await Asset.findById(booking.assetId).select("orgId").lean();
+    if (!asset || String(asset.orgId) !== session.user.orgId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
+
   const oldStatus = booking.status as string;
 
   // --- Guard invalid transitions ---
@@ -98,6 +106,7 @@ export async function PATCH(request: Request, { params }: Params) {
       entity:   "Booking",
       entityId: id,
       metadata: { quantity: booking.quantity, assetId: String(booking.assetId) },
+      orgId:    session?.user?.orgId ?? undefined,
     }).catch(() => {});
 
     return NextResponse.json({ booking: updatedBooking });
@@ -116,6 +125,7 @@ export async function PATCH(request: Request, { params }: Params) {
     action,
     entity:   "Booking",
     entityId: id,
+    orgId:    session?.user?.orgId ?? undefined,
   }).catch(() => {});
 
   return NextResponse.json({ booking: updated });

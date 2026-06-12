@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { canManageAssets } from "@/lib/permissions";
 import { connectToDatabase } from "@/lib/db";
 import { Asset } from "@/models/asset";
+import mongoose from "mongoose";
 
 export async function GET() {
   const session = await auth();
@@ -12,7 +13,13 @@ export async function GET() {
 
   await connectToDatabase();
 
+  const orgId = session?.user?.orgId;
+  const matchStage = orgId && !session?.user?.isSuperAdmin
+    ? { $match: { orgId: new mongoose.Types.ObjectId(orgId) } }
+    : { $match: {} };
+
   const raw = await Asset.aggregate([
+    matchStage,
     { $group: { _id: "$category", count: { $sum: 1 } } },
     { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "cat" } },
     { $project: { name: { $arrayElemAt: ["$cat.name", 0] }, count: 1 } },
