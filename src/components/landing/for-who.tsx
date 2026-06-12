@@ -23,6 +23,30 @@ const WHO = [
   },
 ];
 
+function WhoCard({ w, index }: { w: typeof WHO[0]; index: number }) {
+  const Icon   = w.icon;
+  const ref    = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="flex flex-col gap-4 rounded-xl border border-[--border] p-5"
+    >
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[--surface]">
+        <Icon size={16} className="text-[--fg-muted]" />
+      </div>
+      <div>
+        <h3 className="text-sm font-medium text-[--fg]">{w.title}</h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-[--fg-muted]">{w.body}</p>
+      </div>
+    </motion.div>
+  );
+}
+
 export function ForWho() {
   const titleRef = useRef<HTMLDivElement>(null);
   const inView   = useInView(titleRef, { once: true, margin: "-80px" });
@@ -46,29 +70,9 @@ export function ForWho() {
       </motion.div>
 
       <div className="grid gap-6 sm:grid-cols-3">
-        {WHO.map((w, i) => {
-          const Icon = w.icon;
-          const ref    = useRef<HTMLDivElement>(null);
-          const inView = useInView(ref, { once: true, margin: "-60px" });
-          return (
-            <motion.div
-              key={w.title}
-              ref={ref}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col gap-4 rounded-xl border border-[--border] p-5"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[--surface]">
-                <Icon size={16} className="text-[--fg-muted]" />
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-[--fg]">{w.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-[--fg-muted]">{w.body}</p>
-              </div>
-            </motion.div>
-          );
-        })}
+        {WHO.map((w, i) => (
+          <WhoCard key={w.title} w={w} index={i} />
+        ))}
       </div>
 
       {/* Bottom CTA strip */}
