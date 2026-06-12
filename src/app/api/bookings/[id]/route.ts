@@ -47,7 +47,7 @@ export async function PATCH(request: Request, { params }: Params) {
 
   // --- Org isolation: non-superadmin admins can only act on bookings for their own org's assets ---
   if (!session?.user?.isSuperAdmin && session?.user?.orgId) {
-    const asset = await Asset.findById(booking.assetId).select("orgId").lean();
+    const asset = await Asset.findById(booking.assetId).select("orgId").lean() as { orgId?: unknown } | null;
     if (!asset || String(asset.orgId) !== session.user.orgId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { connectToDatabase } from "@/lib/db";
-import mongoose from "mongoose";
 
 const schema = z.object({
   email:  z.string().email(),

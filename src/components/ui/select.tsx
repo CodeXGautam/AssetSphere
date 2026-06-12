@@ -100,6 +100,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             role="combobox"
             aria-expanded={open}
             aria-haspopup="listbox"
+            aria-controls={`${sid}-listbox`}
             disabled={disabled}
             onClick={() => !disabled && setOpen((v) => !v)}
             className={cn(
@@ -123,6 +124,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           {/* Dropdown */}
           {open && (
             <div
+              id={`${sid}-listbox`}
               role="listbox"
               className={cn(
                 "absolute left-0 right-0 z-50 mt-1 overflow-hidden rounded-lg border border-[--border]",
